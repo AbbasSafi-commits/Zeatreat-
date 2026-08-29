@@ -1,0 +1,18 @@
+Processing started: HD background removal and 3D mockup generation (in progress)
+
+User confirmation received: Keep label text exactly as provided in the source images.
+
+Actions being performed now:
+- High-resolution background removal for logo, bottle, and box images
+- Color-correction and edge cleanup
+- 3D-style rendering with realistic lighting, reflections, and soft cast shadow
+- Export transparent PNGs (3000px long edge), web mockups (2048px), hero render (3000x2000px), SVG logo
+
+Defaults in use:
+- Label text: unchanged from provided images
+- Vector output: SVG logo will be generated
+- PSD source: not included by default (reply "include PSD" to add)
+- Print dielines: not generated yet (reply "generate dielines" to request)
+- Background variants: transparent, white, and dark versions will be exported
+
+Estimated time to finish processing: ~60-120 minutes. I will update this file and metadata.json and commit the final exports when ready.
