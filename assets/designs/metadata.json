@@ -1,0 +1,18 @@
+{
+  "branch": "design/product-mockups",
+  "created_by": "copilot",
+  "date_created": "2026-08-29",
+  "repo": "AbbasSafi-commits/Zeatreat-",
+  "planned_files": [
+    {"filename": "zeetreat-logo-hd.png", "status": "pending"},
+    {"filename": "zeetreat-logo-hd.svg", "status": "pending"},
+    {"filename": "zeetreat-bottle-cutout-3000px.png", "status": "pending"},
+    {"filename": "zeetreat-box-cutout-3000px.png", "status": "pending"},
+    {"filename": "zeetreat-bottle-mockup-2048.png", "status": "pending"},
+    {"filename": "zeetreat-box-mockup-2048.png", "status": "pending"},
+    {"filename": "zeetreat-hero-mockup-3000x2000.png", "status": "pending"},
+    {"filename": "preview/index.html", "status": "created"},
+    {"filename": "metadata.json", "status": "created"}
+  ],
+  "notes": "Image processing started; reply with any label text updates or confirm if you want layered PSD included."
+}
