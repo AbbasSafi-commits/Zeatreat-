@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zeetreat — 3D WebGL Experience</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <style>
+    body,html{height:100%;margin:0;background:#0b0f13;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
+    #canvas-wrap{position:fixed;inset:0;z-index:0}
+    .ui{position:relative;z-index:10;max-width:1200px;margin:40px auto;padding:20px}
+    .hero-copy{max-width:480px}
+    .hero-copy h1{color:#c28a0b}
+    .note{opacity:.8;color:#cfdbe3}
+    a.deploy{color:#fff;background:#0f1720;padding:8px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.05)}
+  </style>
+</head>
+<body>
+  <div id="canvas-wrap"></div>
+
+  <div class="ui">
+    <div class="hero-copy">
+      <h1>Zeetreat — Scroll for 3D</h1>
+      <p class="note">A lightweight Three.js scene uses your product art as alpha-textured planes and animates camera and objects on scroll to create a "3D video" feel. Replace the PNGs in assets/designs/ with the final HD cutouts (transparent PNGs) to get full photorealism.</p>
+      <p><a class="deploy" href="../index.html">Open GSAP CSS 3D version</a></p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script>
+    // Minimal Three.js scene that uses the provided PNG assets as alpha-mapped planes
+    const container = document.getElementById('canvas-wrap');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x071018);
+
+    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera.position.set(0, 0, 900);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.physicallyCorrectLights = true;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    container.appendChild(renderer.domElement);
+
+    // Lights
+    const hemi = new THREE.HemisphereLight(0xffffee, 0x080820, 0.6);
+    scene.add(hemi);
+    const dir = new THREE.DirectionalLight(0xfff0d6, 1.2);
+    dir.position.set(300, 400, 200);
+    dir.castShadow = true;
+    dir.shadow.mapSize.set(2048,2048);
+    scene.add(dir);
+
+    // Ground for soft contact shadow (faked)
+    const groundGeo = new THREE.PlaneGeometry(4000,4000);
+    const groundMat = new THREE.MeshStandardMaterial({color:0x02060a, roughness:1, metalness:0});
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI/2;
+    ground.position.y = -350;
+    scene.add(ground);
+
+    // Load textures (transparent PNGs)
+    const loader = new THREE.TextureLoader();
+    const assetsBase = '../designs/';
+    const textures = {};
+
+    const names = {
+      bottle: 'zeetreat-bottle-cutout-3000px.png',
+      box: 'zeetreat-box-cutout-3000px.png',
+      logo: 'zeetreat-logo-hd.png'
+    };
+
+    // create group
+    const group = new THREE.Group();
+    scene.add(group);
+
+    function makePlane(name, tex, w, h){
+      const mat = new THREE.MeshStandardMaterial({
+        map: tex,
+        transparent: true,
+        alphaTest: 0.05,
+        depthWrite: false,
+        metalness: 0.1,
+        roughness: 0.6,
+        side: THREE.DoubleSide
+      });
+      const geo = new THREE.PlaneGeometry(w,h,1,1);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.castShadow = true;
+      mesh.receiveShadow = false;
+      mesh.name = name;
+      return mesh;
+    }
+
+    // progressive load
+    loader.load(assetsBase + names.box, (tex)=>{
+      tex.encoding = THREE.sRGBEncoding;
+      const mesh = makePlane('box', tex, 520, 880);
+      mesh.position.set(220,-20,-120);
+      mesh.rotation.set(0, -0.35, 0);
+      group.add(mesh);
+    }, undefined, ()=>{ console.warn('Box texture failed to load — check path.')});
+
+    loader.load(assetsBase + names.bottle, (tex)=>{
+      tex.encoding = THREE.sRGBEncoding;
+      const mesh = makePlane('bottle', tex, 360, 820);
+      mesh.position.set(-40, -10, 20);
+      mesh.rotation.set(0, 0.08, 0);
+      group.add(mesh);
+    }, undefined, ()=>{ console.warn('Bottle texture failed to load — check path.')});
+
+    loader.load(assetsBase + names.logo, (tex)=>{
+      tex.encoding = THREE.sRGBEncoding;
+      const mesh = makePlane('logo', tex, 280, 280);
+      mesh.position.set(-260, 220, 150);
+      mesh.rotation.set(0, -0.2, 0);
+      mesh.scale.set(1,1,1);
+      group.add(mesh);
+    }, undefined, ()=>{ console.warn('Logo texture failed to load — check path.')});
+
+    // small bloom-like highlight via emissive plane
+    const highlightGeo = new THREE.PlaneGeometry(1200,600);
+    const highlightMat = new THREE.MeshBasicMaterial({color:0xffdca0, opacity:0.04, transparent:true});
+    const highlight = new THREE.Mesh(highlightGeo, highlightMat);
+    highlight.position.set(0, 220, 200);
+    highlight.rotation.x = -0.2;
+    scene.add(highlight);
+
+    // Camera animation driven by scroll using GSAP ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: '+=3000',
+        scrub: 0.8,
+        pin: false
+      }
+    });
+
+    // Animate camera and group as a cinematic camera move
+    timeline.to(camera.position, { x: 0, y: 20, z: 700, duration: 2, ease: 'power2.inOut' }, 0);
+    timeline.to(group.rotation, { y: -0.4, x: 0.05, duration: 2 }, 0.2);
+    timeline.to(group.position, { x: 0, y: -20, z: -60, duration: 2 }, 0.4);
+
+    timeline.to(camera.position, { x: 120, y: 40, z: 560, duration: 2, ease: 'power3.inOut' }, 1.2);
+    timeline.to(group.rotation, { y: 1.6, x: 0.02, duration: 2 }, 1.6);
+    timeline.to(group.position, { x: 180, y: -40, z: -220, duration: 2, ease: 'power3.in' }, 1.6);
+
+    // subtle idle motion
+    gsap.to(group.rotation, { y: '+=0.02', repeat: -1, yoyo: true, duration: 8, ease: 'sine.inOut' });
+
+    // mouse move parallax
+    let mouse = {x:0,y:0};
+    window.addEventListener('mousemove', (e)=>{
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    function animate(){
+      requestAnimationFrame(animate);
+      // lerp camera toward target influenced by mouse
+      camera.position.x += (mouse.x * 40 - camera.position.x) * 0.06;
+      camera.position.y += (mouse.y * 30 - camera.position.y) * 0.06;
+      camera.lookAt(group.position);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', ()=>{
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
