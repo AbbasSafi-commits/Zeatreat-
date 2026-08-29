@@ -1,0 +1,15 @@
+{
+  "short_name": "ZEETREAT",
+  "name": "ZEETREAT Herbal Hair Oil",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#1a1a1a",
+  "background_color": "#ffffff"
+}

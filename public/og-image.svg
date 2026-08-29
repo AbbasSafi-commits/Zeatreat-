@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f1e8" />
+  <g transform="translate(60,90)">
+    <rect width="480" height="450" rx="16" fill="#3d6b1f" />
+    <text x="240" y="240" font-size="64" font-family="Arial, Helvetica, sans-serif" fill="#f5f1e8" font-weight="700" text-anchor="middle">ZEETREAT</text>
+  </g>
+  <text x="640" y="200" font-size="44" font-family="Arial, Helvetica, sans-serif" fill="#333">Herbal Hair Oil</text>
+  <text x="640" y="260" font-size="28" font-family="Arial, Helvetica, sans-serif" fill="#666">Strengthens roots · Reduces hair fall · Nourishes scalp</text>
+</svg>
