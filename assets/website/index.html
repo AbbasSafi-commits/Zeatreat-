@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zeetreat — 3D Scroll Experience</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <!-- GSAP + ScrollTrigger for scroll-driven timeline -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+  <main id="app">
+    <section class="hero" id="hero">
+      <div class="hero-inner">
+        <div class="scene" id="scene">
+          <div class="light" id="light"></div>
+
+          <div class="logo" id="logo" aria-hidden="true">
+            <img src="../designs/zeetreat-logo-hd.png" alt="Zeetreat logo" />
+          </div>
+
+          <div class="product bottle" id="bottle" aria-hidden="true">
+            <img src="../designs/zeetreat-bottle-cutout-3000px.png" alt="Zeetreat bottle" />
+            <div class="reflection"></div>
+          </div>
+
+          <div class="product box" id="box" aria-hidden="true">
+            <img src="../designs/zeetreat-box-cutout-3000px.png" alt="Zeetreat box" />
+          </div>
+
+        </div>
+
+        <div class="hero-copy">
+          <h1>Zeetreat — Herbal Hair Oil</h1>
+          <p class="lead">A premium, natural formula — scroll to see the product come to life.</p>
+          <p class="cta">Scroll down</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stage" id="stage">
+      <div class="stage-inner">
+        <h2>Real ingredients. Real results.</h2>
+        <p>Phyllanthus emblica, sesame, coconut, castor — handcrafted for healthier hair.</p>
+      </div>
+    </section>
+
+    <section class="details" id="details">
+      <div class="card">
+        <h3>Benefits</h3>
+        <ul>
+          <li>Strengthens roots</li>
+          <li>Reduces hair fall</li>
+          <li>Nourishes the scalp</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>How to use</h3>
+        <ol>
+          <li>Apply a small amount to scalp</li>
+          <li>Massage gently for 5-10 minutes</li>
+          <li>Leave for 3+ hours or overnight</li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Preview site — files in assets/designs/ and assets/website/ on branch <strong>design/product-mockups</strong>.</p>
+    </footer>
+  </main>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
